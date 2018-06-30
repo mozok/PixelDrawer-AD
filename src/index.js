@@ -44,23 +44,7 @@ function startInit() {
     }
   }
 
-  // var el = document.getElementById("pixel-picker");
-
-  // el.addEventListener("touchstart", handleStart, false);
-  // el.addEventListener("touchend", handleEnd, false);
-  // // el.addEventListener("touchcancel", handleCancel, false);
-  // el.addEventListener("touchmove", handleMove, false);
-
-  // console.log(matrix);
 }
-
-// (function ($) {
-//   $('#pixel-picker').pixelPicker({
-//       palette: ['rgb(199, 23, 23)'],
-//       // '#ff0000', '#0000ff', '#ffff00', '#008000','rgb(199, 23, 23)''rgb(192,192,192)' 
-//       eraserColor: 'rgb(192,192,192)'
-//   });
-// }(jQuery));
 
 $(function () {
   isTouchDevice = 'ontouchstart' in document.documentElement;
@@ -117,8 +101,8 @@ $(function () {
     // data += "&dataResultForMCU=" + dataResultForMCU;
     // data += "&img=" + dataURL;
 
-    console.log(data);
-    client.publish('/DOYPanel/command', data);
+    // console.log(data);
+    client.publish('/ADPanel/command', data);
   });
 
   // $('#updateButton').click(function () {
@@ -126,14 +110,20 @@ $(function () {
     
   // });
 
-  $('#photoButton').click(function () {
-    html2canvas(document.body).then(function(canvas) {
-      document.body.appendChild(canvas);
-  });
-  });
+  // $('#photoButton').click(function () {
+  //   html2canvas(document.body).then(function(canvas) {
+  //     document.body.appendChild(canvas);
+  // });
+  // });
 
   $("#timeButton").click(function () {
-    client.publish('/DOYPanel/command', '0#0');
+    client.publish('/ADPanel/command', '0#0');
+  });
+
+  $('#sendTextButton').click(function () {
+    let textToSend = $('#textInput').val();
+
+    client.publish('/ADPanel/command', '2#' + textToSend);
   });
 });
 
