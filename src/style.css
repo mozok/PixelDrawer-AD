@@ -1,0 +1,48 @@
+@font-face {
+    font-family: 'Roboto';
+    src: url('./Roboto-Regular.ttf') format('truetype');
+    font-weight: 600;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Pacifico';
+    src: url('./Pacifico-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Lobster';
+    src: url('./Lobster-Regular.ttf') format('truetype');
+    font-weight: 400;
+}
+
+.hello {
+    color: red;
+    /* background: url('./logo.jpg'); */
+    font-family: 'Lobster';
+}
+
+.title {
+    font-family: 'Pacifico';
+}
+
+.navbar {
+    background-color: rgb(255, 255, 255);
+    display: flex;
+    justify-content: space-around;
+}
+
+/* .flex-right {
+     display: flex;
+    justify-content: flex-end; 
+} */
+
+.nav-el {
+    margin: 4px;
+}
+
+#pixel-picker {
+    touch-action: none;
+}
