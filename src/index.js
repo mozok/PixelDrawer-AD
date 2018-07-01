@@ -97,7 +97,7 @@ $(function () {
     // dataResultForMCU = dataResultForMCU.replace(/,$/, '}');
 
     // var data = "mode=sendImg";
-    var data = "1#" + dataResult;
+    var data = "2#" + dataResult;
     // data += "&dataResultForMCU=" + dataResultForMCU;
     // data += "&img=" + dataURL;
 
@@ -123,7 +123,7 @@ $(function () {
   $('#sendTextButton').click(function () {
     let textToSend = $('#textInput').val();
 
-    client.publish('/ADPanel/command', '2#' + textToSend);
+    client.publish('/ADPanel/command', '1#' + textToSend);
   });
 });
 
