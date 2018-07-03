@@ -30,7 +30,9 @@ var dataResult;
 var dataResultForMCU;
 var dataURL;
 
-var client = mqtt.connect('wss://mqtt.ihome.org.ua:8080/wss', { clientId: 'WebClient-' + parseInt(Math.random() * 100000) })
+var client = mqtt.connect('wss://mqtt.ihome.org.ua:8080/wss', {
+  clientId: 'WebClient-' + parseInt(Math.random() * 100000)
+})
 // window.onload = function () {
 //   startInit();
 // }
@@ -106,8 +108,8 @@ $(function () {
   });
 
   // $('#updateButton').click(function () {
-    // location.reload();
-    
+  // location.reload();
+
   // });
 
   // $('#photoButton').click(function () {
@@ -125,7 +127,39 @@ $(function () {
 
     client.publish('/ADPanel/command', '1#' + textToSend);
   });
+
+  (function () {
+    var slider = $('.range-slider'),
+      range = $('.range-slider__range'),
+      value = $('.range-slider__value');
+
+    slider.each(function () {
+
+      value.each(function () {
+        var value = $(this).prev().attr('value');
+        $(this).html(value);
+      });
+
+      range.on('input', function () {
+        $(this).next(value).html(this.value);
+      });
+
+      range.change(function () {
+        let val = range.val();
+        // console.log(range.val());
+        val = map(val, 0, 100, 0, 65535);
+        client.publish('/ADPanel/command', '10#' + val);
+      });
+
+      var map = function (value, in_min, in_max, out_min, out_max) {
+        return Math.round((value - in_min) * (out_max - out_min) / (in_max - in_min) + out_min);
+      }
+    });
+  }());
+
 });
+
+// rangeSlider();
 
 (function ($) {
 
@@ -491,211 +525,3 @@ $(function () {
   };
 
 }($));
-
-// document.addEventListener('DOMContentLoaded', function () {
-
-//   // Get all "navbar-burger" elements
-//   var $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
-
-//   // Check if there are any navbar burgers
-//   if ($navbarBurgers.length > 0) {
-
-//     // Add a click event on each of them
-//     $navbarBurgers.forEach(function ($el) {
-//       $el.addEventListener('click', function () {
-
-//         // Get the target from the "data-target" attribute
-//         var target = $el.dataset.target;
-//         var $target = document.getElementById(target);
-
-//         // Toggle the class on both the "navbar-burger" and the "navbar-menu"
-//         $el.classList.toggle('is-active');
-//         $target.classList.toggle('is-active');
-
-//       });
-//     });
-//   }
-
-// });
-
-/*function imgSendButtonClick() {
-  // save canvas image as data url (png format by default)
-  // dataURL = document.getElementById('pixel-picker').toDataURL();
-  //console.log(dataURL);
-  // set canvasImg image src to dataURL
-  // so it can be saved as an image
-  // document.getElementById('canvasImg').src = dataURL;
-  //console.log(matrix);
-  dataResult = '';
-  dataResultForMCU = '{';
-  var buf;
-  for (var i = 0; i < matrixCollumns; i++) {
-    buf = '';
-    for (var j = 7; j >= 0; j--) {
-      buf += matrix[j][i].toString();
-    }
-    dataResultForMCU += '0x';
-    // console.log(buf);
-    // console.log(parseInt(buf, 2).toString(16));
-    if (parseInt(buf, 2) <= 0xF) {
-      dataResult += 0;
-      dataResultForMCU += 0;
-    }
-    dataResult += parseInt(buf, 2).toString(16);
-
-    dataResultForMCU += parseInt(buf, 2).toString(16);
-    dataResultForMCU += ',';
-  }
-
-  for (var i = 0; i < matrixCollumns; i++) {
-    buf = '';
-    for (var j = 15; j >= 8; j--) {
-      buf += matrix[j][i].toString();
-    }
-
-    // console.log(buf);
-    // console.log(parseInt(buf, 2).toString(16));
-    dataResultForMCU += '0x';
-    if (parseInt(buf, 2) <= 0xF) {
-      dataResult += 0;
-      dataResultForMCU += 0;
-    }
-    dataResult += parseInt(buf, 2).toString(16);
-
-    dataResultForMCU += parseInt(buf, 2).toString(16);
-    dataResultForMCU += ',';
-  }*/
-
-//dataResultForMCU += '}';
-// dataResultForMCU = dataResultForMCU.replace(/,$/, '}');
-//console.log(dataResultForMCU);
-
-// console.log(matrix);
-// var data = "mode=sendImg";
-// data += "&dataResult=" + dataResult;
-// data += "&dataResultForMCU=" + dataResultForMCU;
-// data += "&img=" + dataURL;
-
-// console.log(data);
-
-  /*$.ajax({
-    url: 'send.php',
-    type: 'POST',
-    data: data,
-    beforeSend: function () {
-      // $('#submit').next().text('Відправляю');
-    },
-    success: function (res) {
-      // console.log(res);
-      // if (res == 1) {
-      //   // $('#dataToSend').find('input:not(#submit), textarea').val('');
-      //   // $('#submit').next().empty();
-      alert('Малюнок відправлено');
-      // } else {
-      //   // $('#submit').next().empty();
-      //   alert('Помилка відправки');
-      // }
-    },
-    error: function () {
-      alert('Помилка!');
-    }
-  });
-}*/
-
-/*$(function () {
-  $('#msgToSend').submit(function () {
-    
-    var msgBox = document.getElementById("msg");
-    if (msgBox.value.length == 0)
-    {
-      alert("Спершу заповніть побажання");
-      return false;
-    }
-    
-    // var errors = false;
-
-    // $(this).find('input, textarea').each(function(){
-    //   if( $.trim( $(this).val() ) == '' ) {
-    //     errors = true;
-    //     $(this).next().text( 'Не заполнено поле ' + $(this).prev().text() );
-    //   }
-    // });
-    //console.log('#data');
-    // if (!errors) {
-      // buttonClick();
-
-      var data = $('#msgToSend').serialize();
-      data += "&mode=sendMsg";
-      // data += "&img=" + dataURL;
-      // data += "&imgData=" + dataResult;
-      //console.log(data);
-      $.ajax({
-        url: 'send.php',
-        type: 'POST',
-        data: data,
-        beforeSend: function () {
-          // $('#submit').next().text('Відправляю');
-        },
-        success: function (res) {
-          alert('Побажання відправлено');
-          // console.log(res);
-          // if (res == 1) {
-          //   // $('#dataToSend').find('input:not(#submit), textarea').val('');
-          //   // $('#submit').next().empty();
-          //   alert('Лист відправлено');
-          // } else {
-          //   // $('#submit').next().empty();
-          //   alert('Помилка відправки');
-          // }
-        },
-        error: function () {
-          alert('Помилка!');
-        }
-      });
-
-    // }
-
-    return false;
-  });
-});
-*/
-// function handleStart(evt) {
-//   evt.preventDefault();
-//   isDragging = true;
-
-//   var x = Math.floor((event.pageX - $(c).offset().left));
-//   var y = Math.floor((event.pageY - $(c).offset().top));
-
-//   chooseColor(x, y, isRightClick);
-//   colorCell(x, y);
-// }
-
-// function handleMove(evt) {
-//   evt.preventDefault();
-
-//   if (!isDragging) return;
-
-//   var x = Math.floor((event.pageX - $(c).offset().left));
-//   var y = Math.floor((event.pageY - $(c).offset().top));
-
-//   colorCell(x, y);
-// }
-
-// function handleEnd(evt) {
-//   evt.preventDefault();
-//   isDragging = false;
-// }
-
-// $(function () {
-
-  // var myIcon = new Image();
-  // myIcon.src=logo;
-
-  // var element = document.getElementById('hello');
-  // element.appendChild(myIcon);
-
-//   $('#imgSendButton').click(function () {
-//     console.log("imgButton Click");
-//   });
-// });
-
